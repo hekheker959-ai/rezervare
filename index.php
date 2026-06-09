@@ -12,6 +12,31 @@ $rooms = getRooms();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grand Hotel — Lux & Eleganță</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Imagini camere */
+    .room-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .room-card:hover .room-img img {
+      transform: scale(1.06);
+    }
+    /* Imagine despre */
+    .about-visual {
+      overflow: hidden;
+      border-radius: 8px;
+    }
+    .about-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
 
@@ -49,6 +74,7 @@ $rooms = getRooms();
   </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
   <div class="hero-pattern"></div>
@@ -70,6 +96,7 @@ $rooms = getRooms();
   </div>
 </section>
 
+<!-- FEATURES STRIP -->
 <div class="features-strip">
   <p class="section-label" style="margin-bottom:2rem;" data-i18n="feat_label">De ce noi</p>
   <div class="features-strip-grid">
@@ -96,20 +123,28 @@ $rooms = getRooms();
   </div>
 </div>
 
+<!-- DESPRE -->
 <section id="despre">
   <div class="about-grid">
     <div class="about-text">
       <p style="font-size:0.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;" data-i18n="nav_about">Despre noi</p>
-      <h2 style="font-family:Georgia,serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;color:var(--text);margin-bottom:1rem;" data-i18n="about_title">O poveste de eleganță</h2>
+      <h2 style="font-family:Georgia,serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;color:var(--text);margin-bottom:1rem;" data-i18n="about_title">O experiență de neuitat într-un cadru elegant</h2>
       <div class="gold-line gold-line-left"></div>
-      <p style="font-size:0.82rem;color:var(--text-light);line-height:1.9;margin-bottom:1rem;" data-i18n="about_p1">Fondat în inima orașului, Grand Hotel reprezintă vârful ospitalității de lux. Cu peste 30 de ani de tradiție, oferim oaspeților noștri experiențe memorabile.</p>
-      <p style="font-size:0.82rem;color:var(--text-light);line-height:1.9;margin-bottom:1.5rem;" data-i18n="about_p2">Fiecare detaliu a fost gândit cu grijă — de la selecția materialelor premium până la formarea echipei noastre dedicate.</p>
-      <a href="about.php" class="btn btn-outline-gold" data-i18n="btn_discover">Descoperă mai mult</a>
+      <p style="font-size:0.82rem;color:var(--text-light);line-height:1.9;margin-bottom:1rem;" data-i18n="about_p1">Grand Hotel este destinația perfectă pentru cei care caută lux, confort și servicii impecabile. Cu o tradiție de peste 50 de ani în ospitalitate, oferim o gamă completă de facilități moderne într-un cadru arhitectural spectaculos.</p>
+      <p style="font-size:0.82rem;color:var(--text-light);line-height:1.9;margin-bottom:1.5rem;" data-i18n="about_p2">Fiecare cameră este decorată cu atenție la detalii, combinând eleganța clasică cu tehnologia modernă pentru a vă oferi cel mai confortabil sejur posibil.</p>
+      <a href="about.php" class="btn btn-outline-gold" data-i18n="btn_discover">Află mai multe</a>
     </div>
-    <div class="about-visual">🏨</div>
+    <div class="about-visual">
+      <img
+        src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
+        alt="Grand Hotel"
+        onerror="this.parentElement.innerHTML='🏨'"
+      >
+    </div>
   </div>
 </section>
 
+<!-- CAMERE -->
 <section id="rooms" style="background: var(--bg-section);">
   <p class="section-label" data-i18n="rooms_label">Camerele noastre</p>
   <div class="gold-line"></div>
@@ -117,11 +152,26 @@ $rooms = getRooms();
   <p class="section-sub" data-i18n="rooms_sub">Fiecare cameră este un sanctuar al confortului</p>
 
   <div class="rooms-grid">
+    <?php
+    $roomImages = [
+      'standard'      => 'https://bristol.md/wp-content/uploads/2024/08/bristol-hotel-chisinau-standard-room-1-1600x986.jpg',
+      'deluxe'        => 'https://www.nobili-interior-design.ro/storage/posts/836/400_8998_Concept_de_design_camera_hotel.webp',
+      'executive'     => 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/209421665.jpg?k=2d1f4a59dbb1d077d3e76582441dbf3ae8cf535a39e2c0e50469fea92137f9e5&o=',
+      'presidential'  => 'https://img.poehalisnami.md/static/hotels/greciya/o-krit/h305201/orig/booking305201_4305201_638871453089400300.jpg',
+      'twin'          => 'https://www.crystalpalacehotel.ro/wp-content/uploads/2025/03/Unknown-10.jpeg',
+    ];
+    ?>
     <?php foreach ($rooms as $room): ?>
     <div class="room-card">
       <div class="room-img">
-        <?= $room['icon'] ?>
-        <span class="room-badge"><?= htmlspecialchars($room['badge']) ?></span>
+        <img
+          src="<?= htmlspecialchars($roomImages[$room['id']] ?? $roomImages['standard']) ?>"
+          alt="<?= htmlspecialchars($room['name']) ?>"
+          onerror="this.style.display='none'; this.parentElement.innerHTML += '<?= $room['icon'] ?? '🛏️' ?>';"
+        >
+        <?php if (!empty($room['badge'])): ?>
+          <span class="room-badge"><?= htmlspecialchars($room['badge']) ?></span>
+        <?php endif; ?>
       </div>
       <div class="room-body">
         <h3 class="room-name"><?= htmlspecialchars($room['name']) ?></h3>
@@ -148,6 +198,7 @@ $rooms = getRooms();
   </div>
 </section>
 
+<!-- MODAL REZERVARE -->
 <?php if ($loggedIn): ?>
 <div class="modal-overlay" id="reserveModal" onclick="closeIfOverlay(event,'reserveModal')">
   <div class="modal">
@@ -204,6 +255,10 @@ function openReserveModal(id, name, price) {
   document.getElementById('modalRoomName').textContent = name;
   document.getElementById('modalRoomPrice').textContent = '€' + price + ' / noapte';
   document.getElementById('reserveModal').classList.add('open');
+}
+function closeIfOverlay(e, id) {
+  if (e.target === e.currentTarget)
+    document.getElementById(id).classList.remove('open');
 }
 </script>
 </body>
